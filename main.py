@@ -3,7 +3,6 @@ import random
 def MontyHall(mode=0, iterations=100):
     wins = 0
     losses = 0
-    winrate = 0.0
     if mode == 0: # Always Switch
             toSwitch = True
     elif mode == 1:
