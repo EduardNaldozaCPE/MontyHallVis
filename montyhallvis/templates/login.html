@@ -1,0 +1,17 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
+
+{% for message in messages %}
+<h5>{{message}}</h5>
+{% endfor %}
+
+<form method="POST" action="login">
+    {% csrf_token %}
+    <p>username:</p>
+    <input type="text" name="username" />
+    <p>Password:</p>
+    <input type="password" name="password" />
+    <input type="submit" />
+</form>

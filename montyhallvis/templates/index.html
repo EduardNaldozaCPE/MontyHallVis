@@ -1,0 +1,12 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
+{% if user.is_authenticated %}
+    <h1>Hello! {{user.username}}</h1>
+{% endif %}
+
+{% for f in feats %}
+    <p>{{f.name}}</p>
+    <p>{{f.details}}</p>
+{% endfor %}
