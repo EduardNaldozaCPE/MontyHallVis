@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 
 # Create your views here.
-def index(request):
+def index(request, *args, **kwargs):
     # From the models file, import the Features Class/Model
     from .models import Features
     feat1 = Features.objects.all()

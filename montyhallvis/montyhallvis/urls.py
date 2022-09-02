@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from montyapp import views
+from montyback.views import scoreAPI
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.index, name='index')
+    # path('admin/', admin.site.urls),
+    path('', include('montyapp.urls')),
+    path('API/', include('montyback.urls')),
 ]

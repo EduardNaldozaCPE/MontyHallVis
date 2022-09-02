@@ -1,12 +1,17 @@
-{% load static %}
+{% extends 'base.html' %}
+{% block content %}
+<!-- {% load static %}
+<link rel="stylesheet" href="{% static 'style.css' %}"> -->
 
-<link rel="stylesheet" href="{% static 'style.css' %}">
-
-{% if user.is_authenticated %}
+<!-- {% if user.is_authenticated %}
     <h1>Hello! {{user.username}}</h1>
-{% endif %}
+{% endif %} -->
+
+<h1>{{ request.user }}</h1>
 
 {% for f in feats %}
-    <p>{{f.name}}</p>
-    <p>{{f.details}}</p>
+    <p class="txt">{{f.name}}</p>
+    <p class="txt">{{f.details}}</p>
 {% endfor %}
+
+{% endblock content %}
