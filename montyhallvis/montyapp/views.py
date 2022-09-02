@@ -6,6 +6,7 @@ from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
+    # From the models file, import the Features Class/Model
     from .models import Features
     feat1 = Features.objects.all()
     return render(request, 'index.html', {'feats':feat1})

@@ -1,0 +1,1 @@
+set MONTY_SECRET="django-insecure-%v=2jxh5lwzzafnp9u7=@6nz-di(!_us!*vqy-md&72q9$4fwd"
