@@ -1,6 +1,4 @@
 import json
-from urllib import response
-from xmlrpc.client import DateTime
 from django.shortcuts import render
 from django.http import HttpResponse
 from .montymain import MontyHall
