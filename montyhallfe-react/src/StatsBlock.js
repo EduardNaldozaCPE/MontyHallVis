@@ -3,33 +3,27 @@ import {jsondata} from './Statdata';
 import Stats from './Stats';
 
 
-var currentMode = 0;
+var defaultMode = 0;
 
 function StatsBlock(){
+     
+     const [statsMode_state, setStatsMode_state] = useState(defaultMode)
 
-     const [statsMode_state, setStatsMode_state] = useState(currentMode)
+     const changeMode = () => {
+          setStatsMode_state((s) => {
+               if (s === 2){
+                    return 0;
+               } else {
+                    return s+1;
+               }
+          })
+     }
+
      return (
           <div className='stats'>
           <h3 className='stats__header'>STATISTICS</h3>
           <Stats mode={statsMode_state} data={jsondata}/>
-          <button type='button' onClick={() => {
-               // console.log('state was :' + currentMode);
-               switch (currentMode) {
-                    case 0:
-                         currentMode=1;
-                         break;
-                    case 1:
-                         currentMode=2;
-                         break;
-                    case 2:
-                         currentMode=0;
-                         break;
-                    default:
-                         break;
-               }
-               // console.log('state is now: ' + currentMode);
-               setStatsMode_state(currentMode);
-          }} className='stats__modeButton'>Change Mode</button>
+          <button type='button' onClick={changeMode} className='stats__modeButton'>Change Mode</button>
           </div>
      );
 }
