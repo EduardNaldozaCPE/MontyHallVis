@@ -1,9 +1,10 @@
 import React from 'react';
 
 const Stats = ({mode, data}) => {
-     let wr = data.data.winrate;
+     let wr = parseFloat(data.data.winrate)*100;
      let wins = data.data.correctCount;
      let loss = data.data.wrongCount;
+     let icount = data.data.icount;
      var modeStatement = 'No Mode';
      switch (mode) {
           case 0:
@@ -24,6 +25,7 @@ const Stats = ({mode, data}) => {
          <p className='stats__winstat'>WR% - {wr}%</p>
          <p className='stats__winstat'>Wins - {wins}</p>
          <p className='stats__winstat'>Losses - {loss}</p>
+         <p className='stats__winstat'>Iterations - {icount}</p>
          {/* {console.log(props)} */}
        </div>
      );
