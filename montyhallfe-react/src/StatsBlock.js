@@ -11,21 +11,59 @@ function StatsBlock(){
      const [statsObj, setStatsObj] = useState(jsondata);
      const [iters, setIters] = useState(0);
 
-     
+     // async function postData(url = '', data = {}) {
+     //      // Default options are marked with *
+     //      const response = await fetch(url, {
+     //           method: 'POST', // *GET, POST, PUT, DELETE, etc.
+     //           mode: 'no-cors', // no-cors, *cors, same-origin
+     //           cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+     //           credentials: 'include', // include, *same-origin, omit
+     //           headers: {
+     //           'Content-Type': 'application/json'
+     //           // 'Content-Type': 'application/x-www-form-urlencoded',
+     //           },
+     //           redirect: 'follow', // manual, *follow, error
+     //           referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+     //           body: JSON.stringify(data) // body data type must match "Content-Type" header
+     //      });
+     //      return response.json(); // parses JSON response into native JavaScript objects
+     // }
+
+     // const postIter = async () => {
+     //      const tempP = {
+     //           mode: statsMode_state,
+     //           act: "clear",
+     //           pasw: "tryme",
+     //      }
+     //      const requestOptions = {
+     //           method: 'POST',
+     //           headers: { 'Content-Type': 'application/json' },
+     //           body: JSON.stringify(tempP),
+     //       };
+       
+     //      await fetch(`http://127.0.0.1:8000/API/score/${statsMode_state}`, requestOptions)
+     //      .then((response) => response.json())
+     //      .then((data) => setStatsObj(data))
+     // }
+
      const postIter = async () => {
-          axios.post(`http://127.0.0.1:8000/API/score/${statsMode_state}`, {
-               mode: toString(statsMode_state),
-               act: "iter",
-               pasw: "tryme",
-               credentials: 'include',
-          }).then(function (response) {
+          var bodyFormData = new FormData();
+          bodyFormData.append('mode', statsMode_state);
+          bodyFormData.append('pasw', 'tryme');
+          bodyFormData.append('act', 'clear');
+          axios({
+               method: "post",
+               url: `http://127.0.0.1:8000/API/score/${statsMode_state}`,
+               data: bodyFormData,
+               headers: { "Content-Type": "multipart/form-data" },
+             })
+          .then(function(response) {
                let finalResponse = {'data':response.data.data,'meta':response.data.meta}
                setStatsObj(finalResponse);
           })
           .catch(function(error){
                console.log(error);
           });
-          
      }
 
      const getData = async () => {

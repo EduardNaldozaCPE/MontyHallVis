@@ -2,6 +2,7 @@ import React from 'react';
 
 const Stats = ({mode, data}) => {
      let wr = parseFloat(data.data.winrate)*100;
+     wr = wr.toFixed(2);
      let wins = data.data.correctCount;
      let loss = data.data.wrongCount;
      let icount = data.data.icount;
