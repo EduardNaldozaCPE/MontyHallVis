@@ -42,6 +42,7 @@ CSRF_COOKIE_HTTPONLY = True
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
