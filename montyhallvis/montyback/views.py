@@ -31,12 +31,17 @@ def scoreAPI(request, *args, **kwargs):
             return HttpResponse(json.dumps(finalData, indent=4, sort_keys=True, default=str), content_type="application/json")
 
         elif request.method == 'POST':
-            row = request.POST['mode']
-            act = request.POST['act']
-            pasw = request.POST['pasw']
+            row = request.POST.get('mode', 0)
+            act = request.POST.get('act', 'iter')
+            pasw = request.POST.get('pasw', 'tryme')
+            # row = request.POST.get['mode']
+            # act = request.POST.get['act']
+            # pasw = request.POST.get['pasw']
+            print(row, act, pasw)
             if pasw == 'tryme':
                 if act == 'clear':
                     g = Stats.objects.filter(mode=row)[0]
+                    print(g)
                     g.correctCount = 0
                     g.wrongCount = 0
                     g.winrate = 0
@@ -54,7 +59,6 @@ def scoreAPI(request, *args, **kwargs):
                         get_stats.wrongCount += 1
 
                     cc = get_stats.correctCount
-                    wc = get_stats.wrongCount
 
                     ic = get_stats.icount
                     get_stats.icount += 1
@@ -64,8 +68,8 @@ def scoreAPI(request, *args, **kwargs):
                         get_stats.winrate = round((cc / ic), 2)
                     # Save the updated data to the database
                     get_stats.save()
-                # return HttpResponse(json.dumps(returnData(), indent=4, sort_keys=True, default=str), content_type="application/json")
-                return Response(json.dumps(returnData(), indent=4, sort_keys=True, default=str), status=status.HTTP_201_CREATED)
+                return HttpResponse(json.dumps(returnData(), indent=4, sort_keys=True, default=str), content_type="application/json")
+                # return Response(data=json.dumps(returnData(), indent=4, sort_keys=True, default=str), status=status.HTTP_201_CREATED, content_type='application/json')
             else:
                 HttpResponse(json.dumps(returnData(), indent=4, sort_keys=True,
                              default=str), content_type="application/json")
