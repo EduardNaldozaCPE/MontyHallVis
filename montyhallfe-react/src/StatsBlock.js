@@ -1,15 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {jsondata} from './Statdata';
 import Stats from './Stats';
 import axios from 'axios';
 
 
-var defaultMode = 0;
-function StatsBlock(){
-     
-     const [statsMode_state, setStatsMode_state] = useState(defaultMode);
-     const [statsObj, setStatsObj] = useState(jsondata);
-     const [iters, setIters] = useState(0);
+function StatsBlock({statsMode_state, setStatsMode_state, statsObj, setStatsObj}){
+
+
+     // const [statsMode_state, setStatsMode_state] = useState(defaultMode);
+     // const [statsObj, setStatsObj] = useState(jsondata);
 
      // async function postData(url = '', data = {}) {
      //      // Default options are marked with *
@@ -46,11 +44,11 @@ function StatsBlock(){
      //      .then((data) => setStatsObj(data))
      // }
 
-     const postIter = async () => {
+     const postStatsz = async (act) => {
           var bodyFormData = new FormData();
           bodyFormData.append('mode', statsMode_state);
           bodyFormData.append('pasw', 'tryme');
-          bodyFormData.append('act', 'clear');
+          bodyFormData.append('act', act);
           axios({
                method: "post",
                url: `http://127.0.0.1:8000/API/score/${statsMode_state}`,
@@ -82,10 +80,6 @@ function StatsBlock(){
           console.log("mode selected: " + statsMode_state);
      }, [statsMode_state])
 
-     useEffect(() => {
-          postIter();
-          console.log("iterating: " + iters);
-     }, [iters])
 
      // statsAction > invokes useEffect[statsMode_state] > invokes getData()
      const statsAction = (a) => {
@@ -98,10 +92,19 @@ function StatsBlock(){
                     }
                })
           } else if (a === 'iter') {
-               setIters(iters+1);
+               postStatsz('iter');
+          } else if (a === 'clear') {
+               postStatsz('clear');
           }
      }
 
+     // SETINTERVAL
+     useEffect(() => {
+          const interval = setInterval(() => {
+               // statsAction('iter')
+          }, 500);
+          return () => clearInterval(interval);
+        }, []);
 
      return (
           <div className='stats'>
@@ -110,6 +113,7 @@ function StatsBlock(){
           <div className='stats__buttons'>
                <button type='button' onClick={() => statsAction('get')} className='stats__modeButton'>Change Mode</button>
                <button type='button' onClick={() => statsAction('iter')} className='stats__modeButton'>POST iter</button>
+               <button type='button' onClick={() => statsAction('clear')} className='stats__modeButton'>POST clear</button>
           </div>
           </div>
      );
