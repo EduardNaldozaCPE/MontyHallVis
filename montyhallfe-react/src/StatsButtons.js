@@ -54,10 +54,12 @@ function StatsBlock({statsMode_state, setStatsMode_state, statsObj, setStatsObj,
 
      return (
           <div className='stats'>
-          <h3 className='stats__header'>STATISTICS</h3>
-          <br/>
-          <Stats mode={statsMode_state} data={statsObj}/>
-          <br/>
+          <h3 className='stats__header'></h3>
+          <div className='stats__buttons'>
+               <button type='button' onClick={() => statsAction('get_change')} className='stats__modeButton'>Change Mode</button>
+               <button type='button' onClick={() => statsAction('iter')} className='stats__modeButton'>POST iter</button>
+               <button type='button' onClick={() => statsAction('get')} className='stats__modeButton'>GET</button>
+          </div>
           </div>
      );
 }
