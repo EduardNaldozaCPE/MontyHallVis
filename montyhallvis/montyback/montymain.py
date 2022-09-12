@@ -1,4 +1,6 @@
 import random
+from time import sleep
+import requests
 
 
 def MontyHall(mode=0, iterations=100):
@@ -121,22 +123,16 @@ def MontyHall_single(mode=0):
 
 
 if (__name__ == "__main__"):
-    res_switch = MontyHall(0, 1000)
-    res_noSwitch = MontyHall(1, 1000)
-    res_random = MontyHall(2, 1000)
-
-    print('')
-    print('-Switch-')
-    print('Wins:', res_switch['wins'])
-    print('Losses:', res_switch['losses'])
-    print('Win Rate:', str(round(res_switch['winrate'], 2))+'%')
-    print('')
-    print('-No Switch-')
-    print('Wins:', res_noSwitch['wins'])
-    print('Losses:', res_noSwitch['losses'])
-    print('Win Rate:', str(round(res_noSwitch['winrate'], 2))+'%')
-    print('')
-    print('-Random-')
-    print('Wins:', res_random['wins'])
-    print('Losses:', res_random['losses'])
-    print('Win Rate:', str(round(res_random['winrate'], 2))+'%')
+    mode = 0
+    endp = f'http://127.0.0.1:8000/API/score/{mode}'
+    while True:
+        getData = requests.get(endp).json()
+        if MontyHall_single(mode=mode)['isWin']:
+            cc = getData['correctCount']
+            print('CORRECT', requests.put(
+                endp, data={'correctCount': int(cc)+1}).text)
+        else:
+            wc = getData['wrongCount']
+            print('WRONG:', requests.put(
+                endp, data={'wrongCount': int(wc)+1}).text)
+        sleep(2)

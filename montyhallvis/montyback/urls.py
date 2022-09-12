@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import scoreAPI
+from .views import scoreAPI, scoreDetail
 
 app_name = 'montyback'
 urlpatterns = [
-    path('score/<int:mode>', scoreAPI, name='scoreAPI')
+    path('score', scoreAPI, name='scoreAPI'),
+    path('score/<int:mode>', scoreDetail, name='scoreDetail')
 ]

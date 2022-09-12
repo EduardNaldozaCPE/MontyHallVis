@@ -1,84 +1,64 @@
-import json
-from django.shortcuts import render
-from django.http import HttpResponse
-from .montymain import MontyHall_single as MH
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
+# from .montymain import MontyHall_single as MH
 from .models import Stats
+from .serializers import StatsSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-import datetime
 
 # Create your views here.
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def scoreAPI(request, *args, **kwargs):
+    if request.method == 'GET':
+        instance = Stats.objects.all()
+        statsData = StatsSerializer(instance, many=True)
+        return Response(statsData.data)
+
+
+@api_view(['GET', 'PUT'])
+def scoreDetail(request, *args, **kwargs):
     def returnData():
-        get_stats_dict = Stats.objects.filter(
-            mode=kwargs['mode'])[0].__dict__
-        data = {
-            'meta': {
-                'datetime': datetime.datetime.now(),
-                'user':     str(request.user),
-            },
-            'data': get_stats_dict
-        }
-        return data
-    if kwargs['mode'] == 0 or kwargs['mode'] == 1 or kwargs['mode'] == 2:
-        if request.method == 'GET':
-            # Return data as json response
-            finalData = returnData()
-            return HttpResponse(json.dumps(finalData, indent=4, sort_keys=True, default=str), content_type="application/json")
+        instance = Stats.objects.filter(mode=kwargs['mode'])[0]
+        statsData = StatsSerializer(instance).data
+        return statsData
 
-        elif request.method == 'POST':
-            row = request.POST.get('mode', 0)
-            act = request.POST.get('act', 'iter')
-            pasw = request.POST.get('pasw', 'tryme')
-            # row = request.POST.get['mode']
-            # act = request.POST.get['act']
-            # pasw = request.POST.get['pasw']
-            print(row, act, pasw)
-            if pasw == 'tryme':
-                if act == 'clear':
-                    g = Stats.objects.filter(mode=row)[0]
-                    print(g)
-                    g.correctCount = 0
-                    g.wrongCount = 0
-                    g.winrate = 0
-                    g.icount = 0
-                    g.save()
-                elif act == 'iter':
-                    # Run the Monty Hall simulation and store in 'result'
-                    result = MH(mode=kwargs['mode'])['isWin']
-                    # Create a query that retrieves the data
-                    get_stats = Stats.objects.filter(mode=kwargs['mode'])[0]
-                    # Update the retrieved data accordingly
-                    if result:
-                        get_stats.correctCount += 1
-                    else:
-                        get_stats.wrongCount += 1
+    try:
+        stats = Stats.objects.get(mode=kwargs['mode'])
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
-                    cc = get_stats.correctCount
+    if request.method == 'GET':
+        finalData = returnData()
+        return Response(finalData)
 
-                    ic = get_stats.icount
-                    get_stats.icount += 1
-                    ic += 1
+    elif request.method == 'PUT':
+        serializer = StatsSerializer(stats, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
 
-                    if ic != 0:
-                        get_stats.winrate = round((cc / ic), 2)
-                    # Save the updated data to the database
-                    get_stats.save()
-                return HttpResponse(json.dumps(returnData(), indent=4, sort_keys=True, default=str), content_type="application/json")
-                # return Response(data=json.dumps(returnData(), indent=4, sort_keys=True, default=str), status=status.HTTP_201_CREATED, content_type='application/json')
+            # Update other relevant data in Database
+            statsModel = Stats.objects.filter(mode=kwargs['mode'])[0]
+            cc = statsModel.correctCount
+            wc = statsModel.wrongCount
+            ic = cc+wc
+            statsModel.icount = ic
+            if ic != 0:
+                wr = "%.2f" % (cc/statsModel.icount)
             else:
-                HttpResponse(json.dumps(returnData(), indent=4, sort_keys=True,
-                             default=str), content_type="application/json")
+                wr = 0
+            statsModel.winrate = wr
+            statsModel.save()
 
-    else:
-        return HttpResponse(json.dumps({
-            "data": {},
-            "meta": {
-                'datetime': datetime.datetime.now(),
-                'user':     str(request.user),
-            }
-        }, indent=4, sort_keys=True, default=str), content_type="application/json")
+            # Update other relevant data in Response
+            rData = serializer.data
+            rData['icount'] = ic
+            rData['winrate'] = wr
+            rData['winrate_percent'] = float(wr)*100
+            return Response(rData)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        pass
