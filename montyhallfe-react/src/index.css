@@ -1,25 +1,37 @@
+:root {
+     --body_bgc: rgb(15 15 15);
+     --stats_bgcg: linear-gradient(150deg, rgb(24 23 52) 0%, rgb(27 20 20) 58%);
+     --stats_bgc: rgb(2,0,36);
+}
+
 body {
-     background-color: #333;
+     background-color: var(--body_bgc);
 }
 
 .stats-chart {
-     margin: 10px;
+     margin-left: auto;
+     margin-right: auto;
+     margin-bottom: 10px;
      font-family: Helvetica, Arial, system-ui, sans-serif ;
      display: flex;
      flex-direction: column;
      justify-content:center;
      align-items: center;
      max-width: 100%;
+     width: 90%;
      height: 100%;
      border-radius: 15px;
-     background-color: rgb(74, 96, 131);
+     background: var(--stats_bgc);
+     background: var(--stats_bgcg);
      color: white;
-     padding: 20px
+     padding: 20px;
+     box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px 2px;
 }
 
 
 .stats {
-     margin: 10px;
+     margin-left: 5px;
+     margin-right: 5px;
      font-family: Helvetica, Arial, system-ui, sans-serif ;
      /* display: flex; */
      flex-direction: column;
@@ -30,25 +42,48 @@ body {
      min-width: fit-content;
      height: 250px;
      border-radius: 15px;
-     background-color: rgb(74, 96, 131);
+     background: var(--stats_bgc);
+     background: var(--stats_bgcg);
      color: white;
-     padding: 20px
+     padding: 20px;
+     box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px 2px;
 }
 
 
 .stats p {
      font-size: .8em;
+     color: #ccc;
 }
 
 .stats__buttons {
      display: flex;
      flex-direction: row;
      margin: 5px;
+     height: 100%;
 }
 
 .stats__modeButton {
-     margin: 10px;
+     transition: background-color 200ms;
+     margin-left: 10px;
+     margin-right: 10px;
      width: 30%;
+     min-height: 90%;
+     height: 90%;
+     border-radius: 10px;
+     border: #333 solid 2px;
+     background-color: rgba(200,200,200,0.7);
+     font-weight: bold;
+     font-family:Helvetica,Arial, sans-serif;
+     box-shadow: rgb(0 0 0 / 30%) 1px 1px 5px 0px;
+}
+
+.stats__modeButton:hover{
+     background-color: rgba(200,200,200,1);
+     box-shadow: rgb(0 0 0 / 30%) 1px 3px 8px 0px;
+}
+.stats__modeButton:active{
+     background-color: rgba(200,200,200,0.2);
+     box-shadow: rgb(0 0 0 / 30%) 0px 0px 0px 0px;
 }
 
 .stats__header {
@@ -57,17 +92,20 @@ body {
 }
 
 .stats__body {
-     width: 80%;
+     width: -webkit-fill-available;
      border-radius: 10px;
-     background-color: rgb(85, 119, 175);
+     background-color: rgb(31, 31, 31);
      margin: 1px;
      padding: 15px;
 }
 
 .twoColumn {
-     margin: 0px;
+     margin-left: auto;
+     margin-right: auto;
+     margin-bottom: 10px;
+     width: 90%;
      padding: 0px;
      display: flex;
      flex-direction: row;
-     justify-content: space-between;
+     justify-content: space-evenly;
 }
