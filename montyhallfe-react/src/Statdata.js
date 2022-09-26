@@ -7,9 +7,5 @@ export const jsondata = {
           "id": 1,
           "winrate": "0.00",
           "wrongCount": 0
-     },
-     "meta": {
-          "datetime": "2022-09-04 15:58:21.115334",
-          "user": "AnonymousUser"
      }
 }
